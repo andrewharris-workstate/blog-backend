@@ -1,0 +1,40 @@
+create database Blog
+go
+
+use Blog
+
+create table [User]
+(
+  Id INT IDENTITY(1,1) PRIMARY KEY,
+  Username NVARCHAR(255) NOT NULL UNIQUE,
+  Password CHAR(60) NOT NULL,
+  DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
+  LastModified TIMESTAMP
+)
+go
+
+create table Blog
+(
+  Id INT IDENTITY(1,1) PRIMARY KEY,
+  UserId INT NOT NULL,
+  Title NVARCHAR(255) NOT NULL,
+  Content NTEXT NOT NULL,
+  DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
+  LastModified TIMESTAMP,
+  FOREIGN KEY (UserId) REFERENCES [User](Id) ON DELETE CASCADE
+)
+go
+
+create table Comment
+(
+  Id INT IDENTITY(1,1) PRIMARY KEY,
+  UserId INT NOT NULL,
+  BlogId INT NOT NULL,
+  Content NTEXT NOT NULL,
+  IsApproved BIT DEFAULT 0,
+  DateCreated DATETIME DEFAULT CURRENT_TIMESTAMP,
+  LastModified TIMESTAMP,
+  FOREIGN KEY (UserId) REFERENCES [User](Id) ON DELETE CASCADE,
+  FOREIGN KEY (BlogId) REFERENCES Blog(Id) ON DELETE NO ACTION
+)
+go
